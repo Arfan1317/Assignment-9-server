@@ -51,3 +51,4 @@ run().catch(console.dir);
 app.listen(port, () => {
   console.log(`DocAppoint Server is listening on port ${port}`);
 });
+module.exports = app;
