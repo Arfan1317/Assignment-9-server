@@ -8,8 +8,7 @@ const port = process.env.PORT || 5000;
 
 app.use(cors());
 app.use(express.json());
-
-const uri = process.env.MONGODB_URI;
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.mongodb.net/?retryWrites=true&w=majority`;
 
 const client = new MongoClient(uri, {
   serverApi: {
@@ -21,7 +20,6 @@ const client = new MongoClient(uri, {
 
 async function run() {
   try {
-   
     await client.connect();
     console.log("Successfully connected to MongoDB!");
 
@@ -41,7 +39,6 @@ async function run() {
       }
     });
 
-    
     app.post('/bookings', async (req, res) => {
       try {
         const bookingData = req.body;
@@ -77,7 +74,7 @@ async function run() {
       }
     });
 
-   
+    
     app.delete('/bookings/:id', async (req, res) => {
       try {
         const id = req.params.id;
@@ -92,14 +89,13 @@ async function run() {
     });
 
     app.get('/', (req, res) => {
-      res.send('DocAppoint Server is successfully running!');
+      res.send('DocAppoint Server is running perfectly!');
     });
 
   } finally {
   
   }
 }
-
 
 run().catch(console.dir);
 
