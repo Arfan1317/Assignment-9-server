@@ -19,8 +19,8 @@ const client = new MongoClient(uri, {
   }
 });
 
-const db = client.db("docAppointDB");
-const bookingsCollection = db.collection("bookings");
+const db = client.db("DocAppointDB");
+const bookingsCollection = db.collection("appointments");
 
 app.get('/', (req, res) => {
   res.send('DocAppoint Server is running perfectly on Vercel!');
@@ -87,10 +87,8 @@ app.delete('/bookings/:id', async (req, res) => {
   }
 });
 
-
 async function run() {
   try {
-   
     await client.db("admin").command({ ping: 1 });
     console.log("Successfully connected to MongoDB!");
   } catch (error) {
