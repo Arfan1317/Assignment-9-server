@@ -19,17 +19,7 @@ const client = new MongoClient(uri, {
   }
 });
 
-let isConnected = false;
-
-async function connectToDatabase() {
-  if (!isConnected) {
-    await client.connect();
-    isConnected = true;
-    console.log("Connected to MongoDB successfully in Vercel!");
-  }
-  const db = client.db("DocAppointDB");
-  return db.collection("appointments");
-}
+const bookingsCollection = client.db("DocAppointDB").collection("appointments");
 
 app.get('/', (req, res) => {
   res.send('DocAppoint Server is running perfectly on Vercel!');
@@ -37,7 +27,6 @@ app.get('/', (req, res) => {
 
 app.get('/bookings/:email', async (req, res) => {
   try {
-    const bookingsCollection = await connectToDatabase();
     const email = req.params.email;
     const query = { userEmail: email };
     const myBookings = await bookingsCollection.find(query).toArray();
@@ -51,7 +40,6 @@ app.get('/bookings/:email', async (req, res) => {
 
 app.post('/bookings', async (req, res) => {
   try {
-    const bookingsCollection = await connectToDatabase();
     const bookingData = req.body;
     const result = await bookingsCollection.insertOne(bookingData);
     
@@ -64,7 +52,6 @@ app.post('/bookings', async (req, res) => {
 
 app.put('/bookings/:id', async (req, res) => {
   try {
-    const bookingsCollection = await connectToDatabase();
     const id = req.params.id;
     const updatedData = req.body;
     const filter = { _id: new ObjectId(id) };
@@ -88,7 +75,6 @@ app.put('/bookings/:id', async (req, res) => {
 
 app.delete('/bookings/:id', async (req, res) => {
   try {
-    const bookingsCollection = await connectToDatabase();
     const id = req.params.id;
     const query = { _id: new ObjectId(id) };
     const result = await bookingsCollection.deleteOne(query);
